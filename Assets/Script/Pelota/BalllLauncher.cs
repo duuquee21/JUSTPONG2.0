@@ -16,7 +16,7 @@ public class BallLauncher : MonoBehaviour
         }
 
         // Reinicia la pelota con la tecla R
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             ResetBall();
         }
@@ -24,7 +24,7 @@ public class BallLauncher : MonoBehaviour
 
     void LaunchBall()
     {
-        // Asegúrate de que no haya una pelota ya lanzada
+        // si no hay otr
         if (currentBall == null)
         {
             currentBall = Instantiate(ballPrefab, launchPoint.position, Quaternion.identity);
