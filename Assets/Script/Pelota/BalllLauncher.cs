@@ -4,7 +4,7 @@ public class BallLauncher : MonoBehaviour
 {
     public GameObject ballPrefab; // Prefab de la pelota
     public Transform launchPoint; // Punto desde el cual se lanza la pelota
-    public Vector3 launchForce = new Vector3(5f, 10f, 0f); // Fuerza inicial del lanzamiento
+    private Vector3 launchForce = new Vector3(5f, 3f, 0f); // Fuerza inicial del lanzamiento
     private GameObject currentBall;
 
     void Update()
@@ -27,7 +27,7 @@ public class BallLauncher : MonoBehaviour
         // si no hay otr
         if (currentBall == null)
         {
-            currentBall = Instantiate(ballPrefab, launchPoint.position, Quaternion.identity);
+            currentBall = Instantiate(ballPrefab, launchPoint.position, launchPoint.rotation);
             Rigidbody rb = currentBall.GetComponent<Rigidbody>();
             rb.AddForce(launchForce, ForceMode.Impulse);
         }
