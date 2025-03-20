@@ -3,12 +3,21 @@ using UnityEngine;
 public class PlatformMover : MonoBehaviour
 {
     private Transform selectedPlatform; // Plataforma actualmente seleccionada
-    public float moveSpeed = 5f; // Velocidad de movimiento de la plataforma
+    private Plane dragPlane; // Plano sobre el que se arrastra la plataforma
+    private Vector3 offset; // Desplazamiento entre el punto de clic y el centro de la plataforma
     public float rotationSpeed = 50f; // Velocidad de rotación de la plataforma
     public float tiltSpeed = 50f; // Velocidad de inclinación de la plataforma
 
+    public SmoothCameraSwitcher cameraSwitcher; // Referencia al script de cambio de cámara
+
     void Update()
     {
+        // Si la cámara está en el eje Z, desactivar el movimiento de la plataforma
+        if (cameraSwitcher.activeAxis == "Z")
+        {
+            return; // No permitir el movimiento si estamos en la cámara Z
+        }
+
         // Detectar selección de plataforma con clic izquierdo
         if (Input.GetMouseButtonDown(0))
         {
@@ -20,18 +29,54 @@ public class PlatformMover : MonoBehaviour
                 if (hit.collider.CompareTag("Platform")) // Asegúrate de etiquetar las plataformas como "Platform"
                 {
                     selectedPlatform = hit.collider.transform; // Guarda la plataforma seleccionada
+
+                    // Crear un plano en la posición de la plataforma y ajustar según la cámara activa
+                    Vector3 planeNormal = GetPlaneNormal(); // Determina el plano según el eje activo
+                    dragPlane = new Plane(planeNormal, selectedPlatform.position);
+
+                    if (dragPlane.Raycast(ray, out float enter))
+                    {
+                        Vector3 hitPoint = ray.GetPoint(enter);
+                        offset = selectedPlatform.position - hitPoint;
+                    }
                 }
             }
         }
 
-        // Mover la plataforma seleccionada con las flechas
+        // Arrastrar la plataforma con el ratón mientras se mantiene el clic izquierdo
+        if (selectedPlatform != null && Input.GetMouseButton(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (dragPlane.Raycast(ray, out float enter))
+            {
+                Vector3 hitPoint = ray.GetPoint(enter);
+                Vector3 newPosition = hitPoint + offset;
+
+                // Restringir el movimiento al eje permitido
+                switch (cameraSwitcher.activeAxis)
+                {
+                    case "Y":
+                        newPosition.x = selectedPlatform.position.x; // Bloquear movimiento en X
+                        newPosition.z = selectedPlatform.position.z; // Bloquear movimiento en Z
+                        break;
+                    case "X":
+                        newPosition.y = selectedPlatform.position.y; // Bloquear movimiento en Y
+                        newPosition.z = selectedPlatform.position.z; // Bloquear movimiento en Z
+                        break;
+                    case "Z":
+                        newPosition.x = selectedPlatform.position.x; // Bloquear movimiento en X
+                        newPosition.y = selectedPlatform.position.y; // Bloquear movimiento en Y
+                        break;
+                }
+
+                selectedPlatform.position = newPosition; // Ajustar posición de la plataforma
+            }
+        }
+
+        // Rotar o inclinar la plataforma seleccionada con teclas
         if (selectedPlatform != null)
         {
-            // Movimiento en el plano XZ
-            float moveX = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime; // Flechas izquierda/derecha
-            float moveZ = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;   // Flechas arriba/abajo
-            selectedPlatform.position += new Vector3(moveX, 0, moveZ);
-
             // Rotación alrededor del eje Y con Q y E
             if (Input.GetKey(KeyCode.Q)) // Rotar en sentido horario
             {
@@ -51,12 +96,27 @@ public class PlatformMover : MonoBehaviour
             {
                 selectedPlatform.Rotate(Vector3.right, tiltSpeed * Time.deltaTime);
             }
+        }
 
-            // Deseleccionar plataforma al presionar la tecla Escape
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                selectedPlatform = null;
-            }
+        // Deseleccionar plataforma al soltar el clic izquierdo
+        if (Input.GetMouseButtonUp(0))
+        {
+            selectedPlatform = null;
+        }
+    }
+
+    // Método para determinar el plano según el eje activo
+    private Vector3 GetPlaneNormal()
+    {
+        if (cameraSwitcher == null) return Vector3.up;
+
+        // Define el plano según el eje activo
+        switch (cameraSwitcher.activeAxis)
+        {
+            case "Y": return Vector3.right; // Movimiento en el eje Y
+            case "X": return Vector3.up;    // Movimiento en el eje X
+            case "Z": return Vector3.up;    // Movimiento en el eje Z
+            default: return Vector3.up;
         }
     }
 }

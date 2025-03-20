@@ -10,6 +10,8 @@ public class SmoothCameraSwitcher : MonoBehaviour
     private Vector3 targetPosition; // Posición objetivo
     private Quaternion targetRotation; // Rotación objetivo
 
+    public string activeAxis { get; private set; } = "XZ"; // Eje activo, por defecto XZ
+
     void Start()
     {
         mainCamera = Camera.main;
@@ -48,6 +50,14 @@ public class SmoothCameraSwitcher : MonoBehaviour
     {
         currentCameraIndex = newCameraIndex;
         UpdateTarget(defaultCameraOffsets[currentCameraIndex].position, defaultCameraOffsets[currentCameraIndex].rotation);
+
+        // Cambiar el eje activo según la cámara seleccionada
+        switch (currentCameraIndex)
+        {
+            case 0: activeAxis = "Y"; break;  // Cámara X: mover en Y
+            case 1: activeAxis = "X"; break;  // Cámara Y: mover en X
+            case 2: activeAxis = "Z"; break;  // Cámara Z: mover en Z
+        }
     }
 
     private void UpdateTarget(Vector3 offsetPosition, Quaternion offsetRotation)
@@ -86,4 +96,12 @@ public class SmoothCameraSwitcher : MonoBehaviour
             }
         }
     }
+
+    // Devuelve el índice de la cámara actual
+    public int GetCurrentCameraIndex()
+    {
+        return currentCameraIndex;
+    }
 }
+
+
