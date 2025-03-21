@@ -4,7 +4,7 @@ public class BallLauncher : MonoBehaviour
 {
     public GameObject ballPrefab; // Prefab de la pelota
     public Transform launchPoint; // Punto desde el cual se lanza la pelota
-    private Vector3 launchForce = new Vector3(5f, 3f, 0f); // Fuerza inicial del lanzamiento
+    public Vector3 launchForce = new Vector3(5f, 3f, 0f); // Fuerza inicial del lanzamiento
     private GameObject currentBall;
 
     void Update()

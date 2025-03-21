@@ -4,7 +4,6 @@ public class SmoothCameraSwitcher : MonoBehaviour
 {
     public Transform[] defaultCameraOffsets; // Offsets por defecto para cada eje (X, Y, Z)
     public float transitionSpeed = 2f; // Velocidad de transición
-    private Transform selectedPlatform; // Plataforma actualmente seleccionada
     private Camera mainCamera; // Cámara principal
     private int currentCameraIndex = 0; // Índice de la cámara actual
     private Vector3 targetPosition; // Posición objetivo
@@ -38,12 +37,6 @@ public class SmoothCameraSwitcher : MonoBehaviour
 
         // Interpolar hacia la posición objetivo
         SmoothTransition();
-
-        // Detectar selección de plataforma con clic izquierdo
-        if (Input.GetMouseButtonDown(0))
-        {
-            DetectPlatform();
-        }
     }
 
     private void SwitchCamera(int newCameraIndex)
@@ -55,23 +48,14 @@ public class SmoothCameraSwitcher : MonoBehaviour
         switch (currentCameraIndex)
         {
             case 0: activeAxis = "Y"; break;  // Cámara X: mover en Y
-            case 1: activeAxis = "X"; break;  // Cámara Y: mover en X
-            case 2: activeAxis = "Z"; break;  // Cámara Z: mover en Z
+            case 1: activeAxis = "XZ"; break; // Cámara Y: mover en XZ
+            case 2: activeAxis = "X"; break;  // Cámara Z: mover en X
         }
     }
 
     private void UpdateTarget(Vector3 offsetPosition, Quaternion offsetRotation)
     {
-        if (selectedPlatform != null)
-        {
-            // Ajustar el objetivo a la plataforma seleccionada
-            targetPosition = selectedPlatform.position + offsetPosition;
-        }
-        else
-        {
-            // Usar las posiciones por defecto
-            targetPosition = offsetPosition;
-        }
+        targetPosition = offsetPosition;
         targetRotation = offsetRotation;
     }
 
@@ -81,27 +65,4 @@ public class SmoothCameraSwitcher : MonoBehaviour
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPosition, Time.deltaTime * transitionSpeed);
         mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, targetRotation, Time.deltaTime * transitionSpeed);
     }
-
-    private void DetectPlatform()
-    {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            if (hit.collider.CompareTag("Platform")) // Asegúrate de que las plataformas tengan la etiqueta "Platform"
-            {
-                selectedPlatform = hit.collider.transform;
-
-                // Actualizar la posición objetivo en función de la plataforma seleccionada
-                UpdateTarget(defaultCameraOffsets[currentCameraIndex].position, defaultCameraOffsets[currentCameraIndex].rotation);
-            }
-        }
-    }
-
-    // Devuelve el índice de la cámara actual
-    public int GetCurrentCameraIndex()
-    {
-        return currentCameraIndex;
-    }
 }
-
-

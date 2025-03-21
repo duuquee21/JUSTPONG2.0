@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Platform
   - Ball
+  - Win
+  - CameraX
+  - CameraY
+  - CameraZ
   layers:
   - Default
   - TransparentFX
