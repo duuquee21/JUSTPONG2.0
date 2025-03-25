@@ -2,43 +2,40 @@ using UnityEngine;
 
 public class BallLauncher : MonoBehaviour
 {
-    public GameObject ballPrefab; // Prefab de la pelota
-    public Transform launchPoint; // Punto desde el cual se lanza la pelota
-    public Vector3 launchForce = new Vector3(5f, 3f, 0f); // Fuerza inicial del lanzamiento
-    private GameObject currentBall;
+    public GameObject ballPrefab; // Prefab de la bola que será disparada
+    public Transform launchPoint; // Punto desde el cual se disparan las bolas
+    public float launchForce = 10f; // Fuerza con la que se dispara la bola
+    public float fireRate = 3f; // Intervalo entre disparos en segundos
+    public float ballLifetime = 5f; // Tiempo de vida de cada bola en segundos
+
+    private float timer = 0f; // Temporizador para controlar los disparos
 
     void Update()
     {
-        // Lanza la pelota con la tecla Espacio
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LaunchBall();
-        }
+        // Incrementar el temporizador basado en el tiempo transcurrido
+        timer += Time.deltaTime;
 
-        // Reinicia la pelota con la tecla R
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        // Disparar una bola si el temporizador alcanza el tiempo de disparo
+        if (timer >= fireRate)
         {
-            ResetBall();
+            FireBall();
+            timer = 0f; // Reiniciar el temporizador
         }
     }
 
-    void LaunchBall()
+    private void FireBall()
     {
-        // si no hay otr
-        if (currentBall == null)
-        {
-            currentBall = Instantiate(ballPrefab, launchPoint.position, launchPoint.rotation);
-            Rigidbody rb = currentBall.GetComponent<Rigidbody>();
-            rb.AddForce(launchForce, ForceMode.Impulse);
-        }
-    }
+        // Instanciar una nueva bola en el punto de lanzamiento
+        GameObject newBall = Instantiate(ballPrefab, launchPoint.position, launchPoint.rotation);
 
-    void ResetBall()
-    {
-        // Destruye la pelota actual si existe
-        if (currentBall != null)
+        // Agregar fuerza a la bola
+        Rigidbody rb = newBall.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            Destroy(currentBall);
+            rb.AddForce(launchPoint.forward * launchForce, ForceMode.Impulse);
         }
+
+        // Destruir la bola después de un tiempo
+        Destroy(newBall, ballLifetime);
     }
 }

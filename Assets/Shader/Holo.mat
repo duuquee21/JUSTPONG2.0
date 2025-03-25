@@ -46,12 +46,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Bright_Power: 0.59
-    - _ColorDensity: 9.53
+    - _Bright_Power: 0.92
+    - _ColorDensity: 1.36
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _patterntilling: {r: 1, g: 1, b: 0, a: 0}
+    - _patterntilling: {r: 54.6, g: 8.06, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &444883055280536390

@@ -2,17 +2,25 @@ using UnityEngine;
 
 public class PlatformMover : MonoBehaviour
 {
-    private Transform selectedPlatform; // Plataforma actualmente seleccionada
-    private Plane dragPlane; // Plano sobre el que se arrastra la plataforma
-    private Vector3 offset; // Desplazamiento entre el punto de clic y el centro de la plataforma
-    public float rotationSpeed = 50f; // Velocidad de rotación de la plataforma
-    public float tiltSpeed = 50f; // Velocidad de inclinación de la plataforma
-
-    public SmoothCameraSwitcher cameraSwitcher; // Referencia al script de cambio de cámara
+    private Transform selectedPlatform; // Plataforma seleccionada
+    private Plane dragPlane; // Plano de arrastre
+    private Vector3 offset; // Desplazamiento entre el clic y la posición de la plataforma
+    public float rotationSpeed = 50f; // Velocidad de rotación
+    public float tiltSpeed = 50f; // Velocidad de inclinación
+    public float heightAdjustmentSpeed = 5f; // Velocidad para ajustar la posición en Y
+    private float currentHeightOffset = 0f; // Desplazamiento acumulado en el eje Y
 
     void Update()
     {
-        // Detectar selección de plataforma con clic izquierdo
+        HandlePlatformSelection();
+        HandlePlatformMovement();
+        HandlePlatformRotationAndTilt();
+        HandlePlatformHeightAdjustment();
+    }
+
+    private void HandlePlatformSelection()
+    {
+        // Detectar selección de plataforma con el botón izquierdo del ratón
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -22,22 +30,33 @@ public class PlatformMover : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Platform")) // Asegúrate de etiquetar las plataformas como "Platform"
                 {
-                    selectedPlatform = hit.collider.transform; // Guarda la plataforma seleccionada
+                    selectedPlatform = hit.collider.transform; // Guardar la plataforma seleccionada
 
-                    // Crear un plano en la posición de la plataforma y ajustar según la cámara activa
-                    Vector3 planeNormal = GetPlaneNormal(); // Determina el plano según el eje activo
-                    dragPlane = new Plane(planeNormal, selectedPlatform.position);
+                    // Crear un plano de arrastre basado en la posición de la plataforma
+                    dragPlane = new Plane(Vector3.up, selectedPlatform.position);
 
                     if (dragPlane.Raycast(ray, out float enter))
                     {
                         Vector3 hitPoint = ray.GetPoint(enter);
                         offset = selectedPlatform.position - hitPoint;
                     }
+
+                    // Inicializar desplazamiento acumulado de altura
+                    currentHeightOffset = 0f;
                 }
             }
         }
 
-        // Arrastrar la plataforma con el ratón mientras se mantiene el clic izquierdo
+        // Deseleccionar la plataforma al soltar el botón izquierdo
+        if (Input.GetMouseButtonUp(0))
+        {
+            selectedPlatform = null;
+        }
+    }
+
+    private void HandlePlatformMovement()
+    {
+        // Mover la plataforma seleccionada mientras se mantiene el botón izquierdo del ratón
         if (selectedPlatform != null && Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -47,75 +66,60 @@ public class PlatformMover : MonoBehaviour
                 Vector3 hitPoint = ray.GetPoint(enter);
                 Vector3 newPosition = hitPoint + offset;
 
-                // Restringir el movimiento según la cámara activa
-                switch (cameraSwitcher.activeAxis)
-                {
-                    case "Y":
-                        // Permitir movimiento en X y Z, pero bloquear Y
-                        newPosition.x = selectedPlatform.position.x;
-                        newPosition.z = selectedPlatform.position.z;
-                        break;
+                // Ajustar la posición Y acumulada
+                newPosition.y += currentHeightOffset;
 
-                    case "XZ":
-                        // Permitir movimiento en X y Z, bloquear Y
-                        newPosition.y = selectedPlatform.position.y;
-                        break;
-
-                    case "X":
-                        // Permitir movimiento solo en Y (bloquear X y Z)
-                        newPosition.x = selectedPlatform.position.x;
-                        newPosition.z = selectedPlatform.position.z;
-                        break;
-                }
-
-                selectedPlatform.position = newPosition; // Ajustar posición de la plataforma
+                // Actualizar la posición de la plataforma
+                selectedPlatform.position = newPosition;
             }
         }
+    }
 
-        // Rotar o inclinar la plataforma seleccionada con teclas
+    private void HandlePlatformRotationAndTilt()
+    {
+        // Rotar e inclinar la plataforma seleccionada con las teclas
         if (selectedPlatform != null)
         {
             // Rotación alrededor del eje Y con Q y E
-            if (Input.GetKey(KeyCode.Q)) // Rotar en sentido horario
+            if (Input.GetKey(KeyCode.A)) // Rotar en sentido horario
             {
                 selectedPlatform.Rotate(Vector3.forward, -rotationSpeed * Time.deltaTime);
             }
-            if (Input.GetKey(KeyCode.E)) // Rotar en sentido antihorario
+            if (Input.GetKey(KeyCode.D)) // Rotar en sentido antihorario
             {
                 selectedPlatform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
             }
 
             // Inclinación (tumbar o levantar) con R y F
-            if (Input.GetKey(KeyCode.R)) // Inclinar hacia adelante
+            if (Input.GetKey(KeyCode.Q)) // Inclinar hacia adelante
             {
                 selectedPlatform.Rotate(Vector3.right, -tiltSpeed * Time.deltaTime);
             }
-            if (Input.GetKey(KeyCode.F)) // Inclinar hacia atrás
+            if (Input.GetKey(KeyCode.E)) // Inclinar hacia atrás
             {
                 selectedPlatform.Rotate(Vector3.right, tiltSpeed * Time.deltaTime);
             }
         }
-
-        // Deseleccionar plataforma al soltar el clic izquierdo
-        if (Input.GetMouseButtonUp(0))
-        {
-            selectedPlatform = null;
-        }
     }
 
-    // Método para determinar el plano según el eje activo
-    private Vector3 GetPlaneNormal()
+    private void HandlePlatformHeightAdjustment()
     {
-        if (cameraSwitcher == null) return Vector3.up;
-
-        // Define el plano según el eje activo
-        switch (cameraSwitcher.activeAxis)
+        // Cambiar la posición en Y de la plataforma seleccionada con W y S
+        if (selectedPlatform != null)
         {
-            case "Y": return Vector3.forward; // Movimiento en el plano XZ
-            case "XZ": return Vector3.up;    // Movimiento en el plano horizontal
-            case "X": return Vector3.up;    // Movimiento restringido al eje Y
-            default: return Vector3.up;
+            if (Input.GetKey(KeyCode.W)) // Subir plataforma
+            {
+                currentHeightOffset += heightAdjustmentSpeed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.S)) // Bajar plataforma
+            {
+                currentHeightOffset -= heightAdjustmentSpeed * Time.deltaTime;
+            }
+
+            // Aplicar el desplazamiento acumulado en Y
+            Vector3 newPosition = selectedPlatform.position;
+            newPosition.y = selectedPlatform.position.y + currentHeightOffset;
+            selectedPlatform.position = newPosition;
         }
     }
 }
-
