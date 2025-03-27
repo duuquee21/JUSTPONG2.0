@@ -8,11 +8,15 @@ public class MouseControlledCamera : MonoBehaviour
     public float minHeight = 2f; // Altura mínima de la cámara
     public float maxHeight = 100f; // Altura máxima de la cámara
 
+    public Vector3 minBounds = new Vector3(-50f, 2f, -50f); // Límites mínimos (X, Y, Z)
+    public Vector3 maxBounds = new Vector3(50f, 100f, 50f); // Límites máximos (X, Y, Z)
+
     void Update()
     {
         HandleRotation();
         HandleMovement();
         HandleZoom();
+        ClampPosition(); // Restringir la posición dentro de los límites
     }
 
     private void HandleRotation()
@@ -50,5 +54,17 @@ public class MouseControlledCamera : MonoBehaviour
         position.y = Mathf.Clamp(position.y, minHeight, maxHeight); // Limitar altura
 
         transform.position = position;
+    }
+
+    private void ClampPosition()
+    {
+        // Restringir la posición de la cámara dentro de los límites
+        Vector3 clampedPosition = transform.position;
+
+        clampedPosition.x = Mathf.Clamp(clampedPosition.x, minBounds.x, maxBounds.x);
+        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minBounds.y, maxBounds.y);
+        clampedPosition.z = Mathf.Clamp(clampedPosition.z, minBounds.z, maxBounds.z);
+
+        transform.position = clampedPosition;
     }
 }
