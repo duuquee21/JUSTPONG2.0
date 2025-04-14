@@ -1062,8 +1062,8 @@
     "m_ObjectId": "37f22469374c422e9e3214ea37f36278",
     "m_Title": "Chamge Color Based on View Direction",
     "m_Position": {
-        "x": -2708.000244140625,
-        "y": 176.99998474121095
+        "x": -2708.0,
+        "y": 177.0
     }
 }
 
@@ -1755,7 +1755,7 @@
     "m_ObjectId": "89e01197f79a4c0abb03d26f4ff03f09",
     "m_Title": "plus_pattern",
     "m_Position": {
-        "x": -2710.000244140625,
+        "x": -2710.0,
         "y": 972.0
     }
 }

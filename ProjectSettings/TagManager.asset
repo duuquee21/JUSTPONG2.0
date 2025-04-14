@@ -10,6 +10,8 @@ TagManager:
   - CameraX
   - CameraY
   - CameraZ
+  - Button
+  - FallingObject
   layers:
   - Default
   - TransparentFX

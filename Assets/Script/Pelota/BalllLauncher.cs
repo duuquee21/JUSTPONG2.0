@@ -28,14 +28,14 @@ public class BallLauncher : MonoBehaviour
         // Instanciar una nueva bola en el punto de lanzamiento
         GameObject newBall = Instantiate(ballPrefab, launchPoint.position, launchPoint.rotation);
 
-        // Agregar fuerza a la bola
+        //añadirle fuerza
         Rigidbody rb = newBall.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.AddForce(launchPoint.forward * launchForce, ForceMode.Impulse);
         }
 
-        // Destruir la bola después de un tiempo
+        // destruir pelota 
         Destroy(newBall, ballLifetime);
     }
 }
