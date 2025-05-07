@@ -6,12 +6,13 @@ public class ButtonColorChanger : MonoBehaviour
 
     public Color defaultColor = Color.green;
     public Color collisionColor = Color.red;
+    public GameObject viento;
 
     private void Start()
     {
         buttonRenderer = GetComponent<Renderer>();
 
-        if (buttonRenderer != null )
+        if (buttonRenderer != null)
         {
             buttonRenderer.material.color = defaultColor;
         }
@@ -19,12 +20,17 @@ public class ButtonColorChanger : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("FallingObject"))
+        if (collision.gameObject.CompareTag("Ball"))
         {
             if (buttonRenderer != null)
             {
                 buttonRenderer.material.color = collisionColor;
             }
+            if (viento != null)
+            {
+                viento.SetActive(false);
+            }
+
         }
     }
 }
