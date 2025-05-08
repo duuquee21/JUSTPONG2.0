@@ -1,32 +1,37 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // Necesario para cambiar escenas
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject winMessageUI;
+    public GameObject winCanvas;
+
     public string ballTag = "Ball";
-    public string winTag = "Win";
-    void Start()
+
+    private void Start()
     {
-        if (winMessageUI != null)
+        if (winCanvas != null) // canvas desactivado de inicio
         {
-            winMessageUI.SetActive(false);
+            winCanvas.SetActive(false);
         }
     }
 
-    // Update is called once per frame
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(ballTag))
         {
-            ShowWinMessage();
+
+            ShowWinCanvas();
         }
     }
 
-    public void ShowWinMessage()
+    public void ShowWinCanvas()
     {
-        if (winMessageUI != null)
+        if ( winCanvas != null )
         {
-            winMessageUI.SetActive(true);
+            winCanvas.SetActive(true); // mostrar el mensaje de victori
+            
         }
     }
+
+
 }
