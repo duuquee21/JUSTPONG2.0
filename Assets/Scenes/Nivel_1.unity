@@ -745,6 +745,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5165139462416318720, guid: 11488acc1006a6040ad2ccb6519c4369, type: 3}
+      propertyPath: ballLifetime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165139462416318720, guid: 11488acc1006a6040ad2ccb6519c4369, type: 3}
       propertyPath: launchForce.x
       value: 0
       objectReference: {fileID: 0}
@@ -1874,6 +1878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1270513227bc1dd4bbe61b71f75eff0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 0}
 --- !u!4 &1168997918
 Transform:
   m_ObjectHideFlags: 0
@@ -3224,6 +3229,14 @@ PrefabInstance:
     - target: {fileID: 4245555422321739060, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4502949307717841520, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -14.485
+      objectReference: {fileID: 0}
+    - target: {fileID: 4502949307717841520, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.795
       objectReference: {fileID: 0}
     - target: {fileID: 5870874170214597097, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
       propertyPath: m_Enabled

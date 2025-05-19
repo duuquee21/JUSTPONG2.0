@@ -665,6 +665,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5165139462416318720, guid: 11488acc1006a6040ad2ccb6519c4369, type: 3}
+      propertyPath: ballLifetime
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165139462416318720, guid: 11488acc1006a6040ad2ccb6519c4369, type: 3}
       propertyPath: launchForce.x
       value: 0
       objectReference: {fileID: 0}
@@ -13631,6 +13635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1270513227bc1dd4bbe61b71f75eff0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 0}
 --- !u!4 &1794536921
 Transform:
   m_ObjectHideFlags: 0
