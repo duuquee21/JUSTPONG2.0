@@ -22,7 +22,7 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
-        tutorialText.text = "Usa el botón derecho del ratón para mover la cámara.";
+        tutorialText.text = "Usa el botón derecho del ratón para mover la cámara estaticamente y  pulsa la rueda del raton para moverte por el escenario.";
         initialCameraPosition = cameraTransform.position;
         initialPlatformPosition = platformTransform.position;
         initialCameraZoom = Vector3.Distance(cameraTransform.position, Vector3.zero);
@@ -71,7 +71,7 @@ public class TutorialManager : MonoBehaviour
         if (zoomChanged)
         {
             tutorialStep++;
-            tutorialText.text = "Usa las teclas W y S para mover una plataforma.";
+            tutorialText.text = "Mientras mantienes clickada una plataforma:   Usa las teclas W y S para mover una plataforma. Usa Q,E,A,D para rotarlas";
         }
     }
 

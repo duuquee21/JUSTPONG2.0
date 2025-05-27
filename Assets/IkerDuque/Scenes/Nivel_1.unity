@@ -1181,8 +1181,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
-=======
 --- !u!1001 &357990508
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1256,7 +1254,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11488acc1006a6040ad2ccb6519c4369, type: 3}
->>>>>>> origin/DEVELOP
 --- !u!1 &374534289 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5878247999557096103, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
@@ -5149,35 +5146,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4502949307717841520, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
       propertyPath: m_LocalPosition.x
-<<<<<<< HEAD
-      value: -14.52
-      objectReference: {fileID: 0}
-    - target: {fileID: 4502949307717841520, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -20.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 4502949307717841520, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5.32
-      objectReference: {fileID: 0}
-    - target: {fileID: 5265457737561178041, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -14.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 5265457737561178041, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -19.97
-      objectReference: {fileID: 0}
-    - target: {fileID: 5265457737561178041, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 6.56
-=======
       value: -14.485
       objectReference: {fileID: 0}
     - target: {fileID: 4502949307717841520, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
       propertyPath: m_LocalPosition.z
       value: 11.795
->>>>>>> origin/DEVELOP
       objectReference: {fileID: 0}
     - target: {fileID: 5870874170214597097, guid: a560bc2ab2eb7f748ad6b9093d034ffe, type: 3}
       propertyPath: m_Enabled
